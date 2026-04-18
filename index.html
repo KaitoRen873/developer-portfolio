@@ -416,7 +416,7 @@
         I'm Riku, a student passionate about coding and technology. I'm actively learning and building projects to grow my skills.
       </p>
       <p style="color: var(--text-secondary);">
-        Web developer focused on building clean, responsive, and interactive web applications using modern technologies like JavaScript and .NET. Passionate about learning, improving, and creating meaningful digital projects.
+        I'm interested in web development, UI design, and creating useful applications.
       </p>
     </div>
   </section>
@@ -425,6 +425,7 @@
     <div class="container">
       <h2>Skills</h2>
       <div class="grid" style="grid-template-columns:repeat(auto-fit, minmax(130px, 1fr));">
+        <!-- Skill cards -->
         <div class="skill-card">
           <i class="fab fa-html5"></i>
           <span style="display:block; font-weight:600;">HTML</span>
@@ -444,14 +445,15 @@
         <div class="skill-card">
           <i class="fab fa-microsoft"></i>
           <span style="display:block; font-weight:600;">.NET</span>
-          <div class="skill-card">
-          <i class="fab fa-comment-dots"></i>
+        </div>
+        <!-- New AI skills -->
+        <div class="skill-card">
+          <i class="fas fa-robot"></i>
           <span style="display:block; font-weight:600;">AI Prompter</span>
-            <div class="skill-card">
-          <i class="fab fa-robot"></i>
+        </div>
+        <div class="skill-card">
+          <i class="fas fa-brain"></i>
           <span style="display:block; font-weight:600;">AI Skills</span>
-        </div>
-        </div>
         </div>
       </div>
     </div>
@@ -472,7 +474,6 @@
             <div class="card-back">
               <p style="margin-bottom:8px;">HTML & CSS, fully responsive</p>
               <div class="btn-group">
-                <!-- Internal link to project page (directory style) -->
                 <a href="./projects/simple-website/" class="btn-outline-light"><i class="fas fa-external-link-alt"></i> Live Demo</a>
                 <a href="https://github.com/rikutenko/simple-website" target="_blank" rel="noopener" class="btn-outline-light"><i class="fab fa-github"></i> GitHub</a>
               </div>
@@ -483,15 +484,15 @@
         <div class="project-card" id="proj2">
           <div class="card-inner">
             <div class="card-front">
-              <h3>JavaScript Webpage</h3>
-              <p style="color: var(--text-secondary);">A dynamic and responsive web project built using JavaScript.</p>
+              <h3>JavaScript Websites</h3>
+              <p style="color: var(--text-secondary);">Web developer focused on building clean, responsive, and interactive web applications using modern technologies like JavaScript and .NET. Passionate about learning, improving, and creating meaningful digital projects.</p>
               <span class="tap-hint"><i class="fas fa-sync-alt"></i> Hover / tap</span>
             </div>
             <div class="card-back">
               <p style="margin-bottom:8px;">Interactive to-do list & note taker</p>
               <div class="btn-group">
                 <a href="./projects/js-app/" class="btn-outline-light"><i class="fas fa-external-link-alt"></i> Live Demo</a>
-                <a href="https://github.com/rikutenko/js-Website" target="_blank" rel="noopener" class="btn-outline-light"><i class="fab fa-github"></i> GitHub</a>
+                <a href="https://github.com/rikutenko/javascript-app" target="_blank" rel="noopener" class="btn-outline-light"><i class="fab fa-github"></i> GitHub</a>
               </div>
             </div>
           </div>
@@ -507,7 +508,6 @@
             <div class="card-back">
               <p style="margin-bottom:8px;">Dark/light mode + flip cards</p>
               <div class="btn-group">
-                <!-- This site's own page (self-link) -->
                 <a href="./" class="btn-outline-light"><i class="fas fa-external-link-alt"></i> Live Demo</a>
                 <a href="https://github.com/rikutenko/portfolio" target="_blank" rel="noopener" class="btn-outline-light"><i class="fab fa-github"></i> GitHub</a>
               </div>
@@ -558,44 +558,47 @@
       const themeIcon = document.getElementById('themeIcon');
       const body = document.body;
 
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme === 'dark') {
-        body.classList.add('dark');
-        themeIcon.classList.remove('fa-moon');
-        themeIcon.classList.add('fa-sun');
-      } else if (savedTheme === 'light') {
-        body.classList.remove('dark');
-        themeIcon.classList.remove('fa-sun');
-        themeIcon.classList.add('fa-moon');
-      } else {
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (prefersDark) {
+      // Ensure icons exist
+      if (themeToggle && themeIcon) {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
           body.classList.add('dark');
           themeIcon.classList.remove('fa-moon');
           themeIcon.classList.add('fa-sun');
-        }
-      }
-
-      themeToggle.addEventListener('click', () => {
-        body.classList.toggle('dark');
-        const isDark = body.classList.contains('dark');
-        if (isDark) {
-          themeIcon.classList.remove('fa-moon');
-          themeIcon.classList.add('fa-sun');
-          localStorage.setItem('theme', 'dark');
-        } else {
+        } else if (savedTheme === 'light') {
+          body.classList.remove('dark');
           themeIcon.classList.remove('fa-sun');
           themeIcon.classList.add('fa-moon');
-          localStorage.setItem('theme', 'light');
+        } else {
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (prefersDark) {
+            body.classList.add('dark');
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+          }
         }
-      });
+
+        themeToggle.addEventListener('click', () => {
+          body.classList.toggle('dark');
+          const isDark = body.classList.contains('dark');
+          if (isDark) {
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+            localStorage.setItem('theme', 'dark');
+          } else {
+            themeIcon.classList.remove('fa-sun');
+            themeIcon.classList.add('fa-moon');
+            localStorage.setItem('theme', 'light');
+          }
+        });
+      }
 
       // ---------- MOBILE MENU ----------
       const menuToggle = document.getElementById('menuToggle');
       const navLinks = document.getElementById('navLinks');
       const navLinkItems = document.querySelectorAll('.nav-links a:not(.theme-toggle)');
 
-      if (menuToggle) {
+      if (menuToggle && navLinks) {
         menuToggle.addEventListener('click', () => {
           navLinks.classList.toggle('show');
           const icon = menuToggle.querySelector('i');
@@ -619,7 +622,7 @@
               targetElement.scrollIntoView({ behavior: 'smooth' });
             }
           }
-          navLinks.classList.remove('show');
+          if (navLinks) navLinks.classList.remove('show');
           if (menuToggle) {
             const icon = menuToggle.querySelector('i');
             icon.classList.remove('fa-times');
