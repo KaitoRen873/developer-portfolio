@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Riku Tenko · Portfolio</title>
+
+  <!-- Google Font & Font Awesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <style>
+    /* ---------- CSS variables for light/dark themes ---------- */
+    :root {
+      --bg: #f9fafb;
+      --surface: #ffffff;
+      --text-primary: #1e293b;
+      --text-secondary: #475569;
+      --border: #e5e7eb;
+      --primary: #3b82f6;
+      --primary-dark: #2563eb;
+      --card-bg: #ffffff;
+      --header-bg: #ffffff;
+      --shadow: rgba(0, 0, 0, 0.05);
+      --footer-border: #e5e7eb;
+      --card-front-bg: #ffffff;
+      --card-back-bg: #3b82f6;
+      --card-back-text: #ffffff;
+    }
+
+    body.dark {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --text-primary: #f1f5f9;
+      --text-secondary: #cbd5e1;
+      --border: #334155;
+      --primary: #60a5fa;
+      --primary-dark: #3b82f6;
+      --card-bg: #1e293b;
+      --header-bg: #0f172a;
+      --shadow: rgba(0, 0, 0, 0.3);
+      --footer-border: #334155;
+      --card-front-bg: #1e293b;
+      --card-back-bg: #2563eb;
+      --card-back-text: #ffffff;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      scroll-behavior: smooth;
+      transition: background 0.3s ease, color 0.2s ease;
+    }
+
+    .container {
+      max-width:1100px;
+      margin:auto;
+      padding:20px;
+    }
+
+    header {
+      position:sticky;
+      top:0;
+      background: var(--header-bg);
+      padding:15px 0;
+      border-bottom:1px solid var(--border);
+      z-index:10;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .nav {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      flex-wrap: wrap;
+    }
+
+    .nav a {
+      text-decoration:none;
+      color: var(--text-primary);
+      margin-left:20px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav a:hover {
+      color: var(--primary);
+    }
+
+    /* theme toggle button */
+    .theme-toggle {
+      background: none;
+      border: 1.5px solid var(--border);
+      border-radius: 30px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-primary);
+      font-size: 1.2rem;
+      margin-left: 20px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .theme-toggle:hover {
+      background: var(--surface);
+    }
+
+    /* mobile menu button */
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      color: var(--text-primary);
+      cursor: pointer;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    section { padding:60px 0; }
+
+    h1 { font-size:2.5rem; margin-bottom:10px; color: var(--text-primary); }
+    h2 { font-size:2rem; margin-bottom:20px; color: var(--text-primary); }
+
+    .hero {
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      gap:30px;
+    }
+
+    .hero-text { flex:1; }
+    .hero-img { flex:1; text-align:center; }
+
+    .avatar {
+      font-size:120px;
+      color: var(--primary);
+    }
+
+    .btn {
+      display:inline-block;
+      margin-top:15px;
+      padding:10px 20px;
+      border-radius:25px;
+      background: var(--primary);
+      color: white;
+      text-decoration:none;
+      border: none;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .btn:hover {
+      background: var(--primary-dark);
+    }
+
+    /* ---------- FLIP CARD STYLES ---------- */
+    .grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));
+      gap:30px;
+    }
+
+    .project-card {
+      perspective: 1000px;
+      height: 280px;
+    }
+
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+      cursor: pointer;
+    }
+
+    .project-card:hover .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .project-card.flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 15px;
+      backface-visibility: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      box-shadow: 0 8px 20px var(--shadow);
+      border: 1px solid var(--border);
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .card-front {
+      background: var(--card-front-bg);
+      color: var(--text-primary);
+    }
+
+    .card-back {
+      background: var(--card-back-bg);
+      color: var(--card-back-text);
+      transform: rotateY(180deg);
+    }
+
+    .card-back .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 16px;
+      width: 100%;
+    }
+
+    .card-back .btn-outline-light {
+      background: transparent;
+      border: 1.5px solid white;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .card-back .btn-outline-light:hover {
+      background: white;
+      color: var(--card-back-bg);
+    }
+
+    body.dark .card-back .btn-outline-light {
+      border-color: #f1f5f9;
+      color: #f1f5f9;
+    }
+    body.dark .card-back .btn-outline-light:hover {
+      background: #f1f5f9;
+      color: #1e40af;
+    }
+
+    .tap-hint {
+      font-size: 0.8rem;
+      margin-top: 10px;
+      opacity: 0.7;
+    }
+
+    /* contact form styling */
+    .contact-form {
+      margin-top: 20px;
+      max-width: 500px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-family: inherit;
+      font-size: 1rem;
+      background: var(--surface);
+      color: var(--text-primary);
+      transition: border 0.2s, background 0.3s;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    .form-feedback {
+      margin-top: 12px;
+      font-weight: 500;
+      min-height: 24px;
+      color: var(--primary);
+    }
+
+    footer {
+      text-align:center;
+      padding:20px;
+      border-top:1px solid var(--footer-border);
+      color: var(--text-secondary);
+    }
+
+    /* Active nav link style */
+    .nav a.active {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .contact-info i {
+      margin-right: 8px;
+      color: var(--primary);
+    }
+
+    /* Skills cards (non-flip) */
+    .skill-card {
+      background: var(--card-front-bg);
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 10px var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .skill-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 20px var(--shadow);
+    }
+    .skill-card i {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+      color: var(--primary);
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .menu-toggle {
+        display: block;
+      }
+      .nav-links {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        padding: 20px 0 10px;
+      }
+      .nav-links.show {
+        display: flex;
+      }
+      .nav a {
+        margin-left: 0;
+        margin: 0 10px;
+      }
+      .theme-toggle {
+        margin-left: 0;
+        margin-top: 8px;
+      }
+      .nav {
+        flex-wrap: wrap;
+      }
+      .grid {
+        gap: 20px;
+      }
+      .project-card {
+        height: 260px;
+      }
+    }
+
+    html {
+      scroll-padding-top: 80px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <strong style="color: var(--text-primary);">Riku Tenko</strong>
+      <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="nav-links" id="navLinks">
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+          <i class="fas fa-moon" id="themeIcon"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <section id="home">
+    <div class="container hero">
+      <div class="hero-text">
+        <h1>Hi, I'm Riku Tenko</h1>
+        <p style="color: var(--text-secondary);">Student developer learning web technologies and building projects.</p>
+        <a href="#projects" class="btn">View My Work</a>
+      </div>
+      <div class="hero-img">
+        <i class="fas fa-user-graduate avatar"></i>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="container">
+      <h2>About Me</h2>
+      <p style="color: var(--text-secondary);">
+        I'm Riku, a student passionate about coding and technology. I'm actively learning and building projects to grow my skills.
+      </p>
+      <p style="color: var(--text-secondary);">
+        I'm interested in web development, UI design, and creating useful applications.
+      </p>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="container">
+      <h2>Skills</h2>
+      <div class="grid" style="grid-template-columns:repeat(auto-fit, minmax(130px, 1fr));">
+        <div class="skill-card">
+          <i class="fab fa-html5"></i>
+          <span style="display:block; font-weight:600;">HTML</span>
+        </div>
+        <div class="skill-card">
+          <i class="fab fa-css3-alt"></i>
+          <span style="display:block; font-weight:600;">CSS</span>
+        </div>
+        <div class="skill-card">
+          <i class="fab fa-js"></i>
+          <span style="display:block; font-weight:600;">JavaScript</span>
+        </div>
+        <div class="skill-card">
+          <i class="fab fa-git-alt"></i>
+          <span style="display:block; font-weight:600;">Git</span>
+        </div>
+        <div class="skill-card">
+          <i class="fab fa-microsoft"></i>
+          <span style="display:block; font-weight:600;">.NET</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="container">
+      <h2>Projects</h2>
+      <div class="grid">
+        <!-- Flip Card 1 -->
+        <div class="project-card" id="proj1">
+          <div class="card-inner">
+            <div class="card-front">
+              <h3>Simple Website</h3>
+              <p style="color: var(--text-secondary);">A basic responsive site</p>
+              <span class="tap-hint"><i class="fas fa-sync-alt"></i> Hover / tap</span>
+            </div>
+            <div class="card-back">
+              <p style="margin-bottom:8px;">HTML & CSS, fully responsive</p>
+              <div class="btn-group">
+                <!-- Internal link to project page (directory style) -->
+                <a href="./projects/simple-website/" class="btn-outline-light"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                <a href="https://github.com/rikutenko/simple-website" target="_blank" rel="noopener" class="btn-outline-light"><i class="fab fa-github"></i> GitHub</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Flip Card 2 -->
+        <div class="project-card" id="proj2">
+          <div class="card-inner">
+            <div class="card-front">
+              <h3>JavaScript App</h3>
+              <p style="color: var(--text-secondary);">DOM manipulation practice</p>
+              <span class="tap-hint"><i class="fas fa-sync-alt"></i> Hover / tap</span>
+            </div>
+            <div class="card-back">
+              <p style="margin-bottom:8px;">Interactive to-do list & note taker</p>
+              <div class="btn-group">
+                <a href="./projects/js-app/" class="btn-outline-light"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                <a href="https://github.com/rikutenko/javascript-app" target="_blank" rel="noopener" class="btn-outline-light"><i class="fab fa-github"></i> GitHub</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Flip Card 3 -->
+        <div class="project-card" id="proj3">
+          <div class="card-inner">
+            <div class="card-front">
+              <h3>Portfolio Website</h3>
+              <p style="color: var(--text-secondary);">This very site</p>
+              <span class="tap-hint"><i class="fas fa-sync-alt"></i> Hover / tap</span>
+            </div>
+            <div class="card-back">
+              <p style="margin-bottom:8px;">Dark/light mode + flip cards</p>
+              <div class="btn-group">
+                <!-- This site's own page (self-link) -->
+                <a href="./" class="btn-outline-light"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                <a href="https://github.com/rikutenko/portfolio" target="_blank" rel="noopener" class="btn-outline-light"><i class="fab fa-github"></i> GitHub</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p style="margin-top: 20px; font-size: 0.9rem; color: var(--text-secondary);"><i class="fas fa-hand-pointer"></i> Hover over cards (or tap on mobile) to flip.</p>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container">
+      <h2>Contact</h2>
+      <p style="color: var(--text-secondary);">You can reach me at:</p>
+      <p class="contact-info"><i class="fas fa-envelope"></i> guest67483@gmail.com</p>
+
+      <div class="contact-form">
+        <h3 style="margin-bottom: 16px; font-size: 1.3rem; color: var(--text-primary);">Or send a message</h3>
+        <form id="contactForm">
+          <div class="form-group">
+            <label for="name">Your name</label>
+            <input type="text" id="name" placeholder="John Doe" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" id="email" placeholder="john@example.com" required>
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" rows="3" placeholder="Hello Riku, I'd like to connect..."></textarea>
+          </div>
+          <button type="submit" class="btn" style="margin-top: 0;">Send message</button>
+          <div id="formFeedback" class="form-feedback"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 Riku Tenko · built with <i class="fas fa-heart" style="color: var(--primary);"></i></p>
+  </footer>
+
+  <script>
+    (function() {
+      // ---------- DARK/LIGHT MODE ----------
+      const themeToggle = document.getElementById('themeToggle');
+      const themeIcon = document.getElementById('themeIcon');
+      const body = document.body;
+
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+        body.classList.add('dark');
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+      } else if (savedTheme === 'light') {
+        body.classList.remove('dark');
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+      } else {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) {
+          body.classList.add('dark');
+          themeIcon.classList.remove('fa-moon');
+          themeIcon.classList.add('fa-sun');
+        }
+      }
+
+      themeToggle.addEventListener('click', () => {
+        body.classList.toggle('dark');
+        const isDark = body.classList.contains('dark');
+        if (isDark) {
+          themeIcon.classList.remove('fa-moon');
+          themeIcon.classList.add('fa-sun');
+          localStorage.setItem('theme', 'dark');
+        } else {
+          themeIcon.classList.remove('fa-sun');
+          themeIcon.classList.add('fa-moon');
+          localStorage.setItem('theme', 'light');
+        }
+      });
+
+      // ---------- MOBILE MENU ----------
+      const menuToggle = document.getElementById('menuToggle');
+      const navLinks = document.getElementById('navLinks');
+      const navLinkItems = document.querySelectorAll('.nav-links a:not(.theme-toggle)');
+
+      if (menuToggle) {
+        menuToggle.addEventListener('click', () => {
+          navLinks.classList.toggle('show');
+          const icon = menuToggle.querySelector('i');
+          if (navLinks.classList.contains('show')) {
+            icon.classList.remove('fa-bars');
+            icon.classList.add('fa-times');
+          } else {
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+          }
+        });
+      }
+
+      navLinkItems.forEach(link => {
+        link.addEventListener('click', (e) => {
+          const targetId = link.getAttribute('href');
+          if (targetId && targetId.startsWith('#')) {
+            e.preventDefault();
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+              targetElement.scrollIntoView({ behavior: 'smooth' });
+            }
+          }
+          navLinks.classList.remove('show');
+          if (menuToggle) {
+            const icon = menuToggle.querySelector('i');
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+          }
+        });
+      });
+
+      const workBtn = document.querySelector('.hero .btn');
+      if (workBtn) {
+        workBtn.addEventListener('click', (e) => {
+          const href = workBtn.getAttribute('href');
+          if (href && href.startsWith('#')) {
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) target.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      }
+
+      // ---------- ACTIVE NAV HIGHLIGHT ----------
+      const sections = document.querySelectorAll('section[id]');
+      window.addEventListener('scroll', () => {
+        let current = '';
+        const scrollPosition = window.scrollY + 120;
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop;
+          const sectionHeight = section.offsetHeight;
+          if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+            current = section.getAttribute('id');
+          }
+        });
+        navLinkItems.forEach(link => {
+          link.classList.remove('active');
+          const href = link.getAttribute('href').substring(1);
+          if (href === current) link.classList.add('active');
+        });
+      });
+
+      // ---------- CONTACT FORM ----------
+      const form = document.getElementById('contactForm');
+      const feedbackDiv = document.getElementById('formFeedback');
+      if (form) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const name = document.getElementById('name').value.trim();
+          const email = document.getElementById('email').value.trim();
+          if (!name || !email) {
+            feedbackDiv.textContent = '⚠️ Please fill in your name and email.';
+            feedbackDiv.style.color = '#ef4444';
+            return;
+          }
+          if (!email.includes('@') || !email.includes('.')) {
+            feedbackDiv.textContent = '⚠️ Please enter a valid email address.';
+            feedbackDiv.style.color = '#ef4444';
+            return;
+          }
+          feedbackDiv.textContent = `✅ Thanks, ${name}! Your message was sent (demo).`;
+          feedbackDiv.style.color = body.classList.contains('dark') ? '#60a5fa' : '#3b82f6';
+          form.reset();
+          setTimeout(() => {
+            feedbackDiv.style.color = body.classList.contains('dark') ? '#60a5fa' : '#3b82f6';
+          }, 3000);
+        });
+      }
+
+      // Smooth scroll for any anchor
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          if (href === "#" || href === "") return;
+          const target = document.querySelector(href);
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      });
+
+      // ---------- TOUCH FLIP FOR MOBILE ----------
+      const projectCards = document.querySelectorAll('.project-card');
+      projectCards.forEach(card => {
+        card.addEventListener('click', (e) => {
+          if (e.target.closest('a')) return;
+          card.classList.toggle('flipped');
+        });
+        card.addEventListener('mouseleave', () => {
+          card.classList.remove('flipped');
+        });
+      });
+    })();
+  </script>
+
+  <style>
+    .project-card.flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+    .nav-links a.active {
+      color: var(--primary) !important;
+      font-weight: 700;
+    }
+    .card-back a {
+      pointer-events: auto;
+      z-index: 5;
+    }
+    .card-front, .card-back {
+      pointer-events: auto;
+    }
+  </style>
+</body>
+</html>
