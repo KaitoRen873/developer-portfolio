@@ -425,7 +425,7 @@
     <div class="container">
       <h2>Skills</h2>
       <div class="grid" style="grid-template-columns:repeat(auto-fit, minmax(130px, 1fr));">
-        <!-- Skill cards -->
+        <!-- Skill cards - EXACT LIST, no extra "JS" -->
         <div class="skill-card">
           <i class="fab fa-html5"></i>
           <span style="display:block; font-weight:600;">HTML</span>
@@ -446,7 +446,6 @@
           <i class="fab fa-microsoft"></i>
           <span style="display:block; font-weight:600;">.NET</span>
         </div>
-        <!-- New AI skills -->
         <div class="skill-card">
           <i class="fas fa-robot"></i>
           <span style="display:block; font-weight:600;">AI Prompter</span>
@@ -484,8 +483,8 @@
         <div class="project-card" id="proj2">
           <div class="card-inner">
             <div class="card-front">
-              <h3>JavaScript Websites</h3>
-              <p style="color: var(--text-secondary);">Web developer focused on building clean, responsive, and interactive web applications using modern technologies like JavaScript and .NET. Passionate about learning, improving, and creating meaningful digital projects.</p>
+              <h3>JavaScript App</h3>
+              <p style="color: var(--text-secondary);">DOM manipulation practice</p>
               <span class="tap-hint"><i class="fas fa-sync-alt"></i> Hover / tap</span>
             </div>
             <div class="card-back">
@@ -523,7 +522,7 @@
     <div class="container">
       <h2>Contact</h2>
       <p style="color: var(--text-secondary);">You can reach me at:</p>
-      <p class="contact-info"><i class="fas fa-envelope"></i> guest67483@gmail.com</p>
+      <p class="contact-info"><i class="fas fa-envelope"></i> riku.tenko@example.dev</p>
 
       <div class="contact-form">
         <h3 style="margin-bottom: 16px; font-size: 1.3rem; color: var(--text-primary);">Or send a message</h3>
@@ -558,7 +557,6 @@
       const themeIcon = document.getElementById('themeIcon');
       const body = document.body;
 
-      // Ensure icons exist
       if (themeToggle && themeIcon) {
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme === 'dark') {
